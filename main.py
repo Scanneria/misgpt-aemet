@@ -5,6 +5,13 @@ app = FastAPI()
 
 AEMET_API_KEY = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzY2FubmVyaWF2MTcyQGdtYWlsLmNvbSIsImp0aSI6IjJkNTliN2FkLWQ2MjMtNGI2MC05ZTEyLTM3N2QzMzIxMjIxYiIsImlzcyI6IkFFTUVUIiwiaWF0IjoxNzQ4NTQ1Mjk3LCJ1c2VySWQiOiIyZDU5YjdhZC1kNjIzLTRiNjAtOWUxMi0zNzdkMzMyMTIyMWIiLCJyb2xlIjoiIn0.2YnJzBm6mYwfwgIjK2-fPqPnjjBUeBug2B4iC6Gy6-U"
 
+def extraer_valor(lista, campo):
+    for item in lista:
+        valor = item.get(campo)
+        if valor not in [None, "", 0]:
+            return valor
+    return "Sin dato"
+
 @app.get("/meteo")
 def meteo(municipio_id: str = Query(..., description="Código INE del municipio")):
     headers = {
@@ -19,10 +26,4 @@ def meteo(municipio_id: str = Query(..., description="Código INE del municipio"
 
     datos_url = res.json().get("datos")
     datos = requests.get(datos_url).json()
-
-    return {
-        "debug": "Respuesta completa desde AEMET",
-        "municipio": datos[0].get("nombre", "Sin nombre"),
-        "contenido_completo": datos[0]
-    }
 
