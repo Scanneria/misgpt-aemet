@@ -63,4 +63,3 @@ def meteo(municipio_id: str = Query(..., description="Código INE del municipio"
             estado_cielo=str(e),
             precipitacion_prob=0
         )
-
